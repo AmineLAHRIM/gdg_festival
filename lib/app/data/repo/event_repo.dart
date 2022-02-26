@@ -27,6 +27,7 @@ class EventRepoImpl implements EventRepo {
         final events = await remoteEventRepo.getEvents();
         return Right(events);
       } on RemoteException catch (remoteExp) {
+        /// Log no fatal Firebase crashlytics
         return Left(ServerFailure(message: remoteExp.message));
       }
     } else {
@@ -35,6 +36,7 @@ class EventRepoImpl implements EventRepo {
         final events = await localEventRepo.getEvents();
         return Right(events);
       } on CacheException catch (cacheExp) {
+        /// Log no fatal Firebase crashlytics
         return Left(CacheFailure(message: cacheExp.message));
       }
     }

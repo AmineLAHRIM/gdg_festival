@@ -13,8 +13,9 @@ class EventService {
   EventService(this.eventRepo);
 
   Future<Either<Failure,List<Event>>> getEvents() async{
-    final failureOrEvents = await eventRepo.getEvents();
-    failureOrEvents.fold((l) {}, (_events) => events.assignAll(_events));
+    final failureOrEvents=await eventRepo.getEvents();
+    failureOrEvents.fold((failure) {
+    }, (_events) => events.assignAll(_events));
     return failureOrEvents;
   }
 

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gdg_festival/app/core/di/injection.dart';
+import 'package:gdg_festival/app/core/state/loading_state.dart';
 import 'package:gdg_festival/app/modules/home/views/list_event_view.dart';
 import 'package:gdg_festival/app/routes/app_pages.dart';
 import 'package:gdg_festival/app/widgets/favorite_card.dart';
@@ -31,7 +32,7 @@ class HomeView extends StatelessWidget {
               error: (value) => value.message != null ? Text(value.message!) : const SizedBox(),
               loaded: (value) {
                 final events = homeController.events.toList();
-                if (events.isEmpty) return Container();
+                if (events.isEmpty) return const SizedBox();
                 return RefreshIndicator(
                   onRefresh: () => homeController.onRefresh(),
                   child: ListEventView(
