@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-import '../modules/home/bindings/home_binding.dart';
+import '../modules/event_detail/views/event_detail_view.dart';
 import '../modules/home/views/home_view.dart';
 
 part 'app_routes.dart';
@@ -14,7 +14,10 @@ class AppPages {
     GetPage(
       name: _Paths.HOME,
       page: () => HomeView(),
-      binding: HomeBinding(),
+    ),
+    GetPage(
+      name: _Paths.EVENT_DETAIL,
+      page: () => EventDetailView(),
     ),
   ];
 }

@@ -10,12 +10,23 @@ dependencies:
   get: 4.6.1
   flutter: 
     sdk: flutter
+  injectable:
+  get_it:
+  freezed:
+  freezed_annotation:
+  dartz:
+  connectivity:
+  cached_network_image:
 
 dev_dependencies: 
   flutter_lints: ^1.0.0
   lints: 1.0.1
   flutter_test: 
     sdk: flutter
+  # add the generator to your dev_dependencies
+  injectable_generator:
+  # flutter pub run build_runner watch --delete-conflicting-outputs
+  build_runner:
 
 flutter: 
   uses-material-design: true
