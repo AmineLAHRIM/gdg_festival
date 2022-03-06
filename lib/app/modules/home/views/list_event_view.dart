@@ -36,7 +36,7 @@ class ListEventView extends StatelessWidget {
                     fit: StackFit.expand,
                     children: [
                       InkWell(
-                        onTap: () => Get.toNamed(Routes.EVENT_DETAIL, arguments: {"index": index}),
+                        onTap: () => Get.toNamed(Routes.EVENT_DETAIL, parameters: {"id": event.id}),
                         child: CachedNetworkImage(
                           imageUrl: event.imageUrl,
                           fit: BoxFit.cover,
@@ -44,7 +44,7 @@ class ListEventView extends StatelessWidget {
                         ),
                       ),
                       FavoriteCard(
-                        onPressed: () => homeController.onFavorite(index: index, isFav: event.isFavorite),
+                        onPressed: () => homeController.onFavorite(id: event.id, isFav: event.isFavorite),
                         isFavorite: event.isFavorite,
                       )
                     ],

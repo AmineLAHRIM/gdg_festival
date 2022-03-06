@@ -9,6 +9,8 @@ import 'package:injectable/injectable.dart';
 
 abstract class EventRepo {
   Future<Either<Failure, List<Event>>> getEvents();
+
+  Future<Either<Failure, Event>> getEvent({required String id});
 }
 
 @LazySingleton(as: EventRepo)
@@ -35,6 +37,29 @@ class EventRepoImpl implements EventRepo {
       try {
         final events = await localEventRepo.getEvents();
         return Right(events);
+      } on CacheException catch (cacheExp) {
+        /// Log no fatal Firebase crashlytics
+        return Left(CacheFailure(message: cacheExp.message));
+      }
+    }
+  }
+
+  @override
+  Future<Either<Failure, Event>> getEvent({required String id}) async {
+    if (await networkInfo.isConnected()) {
+      /// Here we will call the remote layer
+      try {
+        final event = await remoteEventRepo.getEvent(id:id);
+        return Right(event);
+      } on RemoteException catch (remoteExp) {
+        /// Log no fatal Firebase crashlytics
+        return Left(ServerFailure(message: remoteExp.message));
+      }
+    } else {
+      /// Here we will call the local layer
+      try {
+        final event = await localEventRepo.getEvent(id:id);
+        return Right(event);
       } on CacheException catch (cacheExp) {
         /// Log no fatal Firebase crashlytics
         return Left(CacheFailure(message: cacheExp.message));

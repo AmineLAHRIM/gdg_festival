@@ -6,11 +6,9 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class EventDetailController extends GetxController {
-  late int index;
-
   final pageState = Rx<LoadingState>(LoadingState.loading());
 
-  Event get event => eventService.events[index];
+  var event = Rx<Event?>(null);
 
   List<Event> get events => eventService.events;
 
@@ -35,14 +33,19 @@ class EventDetailController extends GetxController {
   void onClose() {}
 
   onFavorite() {
-    eventService.favorite(index: index, isFav: isFavorite.value);
+    eventService.favorite(id: event.value!.id, isFav: isFavorite.value);
     isFavorite.toggle();
   }
 
-  void _fetchEvent() {
+  void _fetchEvent() async {
     pageState.value = LOADING();
-    index = Get.arguments['index'];
-    isFavorite.value=event.isFavorite;
-    pageState.value = LOADED();
+    final _id = Get.parameters['id'];
+    if (_id == null) return;
+    final failureOrEvent = await eventService.getEvent(id: _id);
+    failureOrEvent.fold((l) {}, (_event) {
+      event.value = _event;
+      isFavorite.value =_event.isFavorite;
+      pageState.value = LOADED();
+    });
   }
 }

@@ -4,13 +4,12 @@ import 'package:gdg_festival/app/core/di/injection.dart';
 import 'package:gdg_festival/app/core/state/loading_state.dart';
 import 'package:gdg_festival/app/routes/app_pages.dart';
 import 'package:gdg_festival/app/widgets/favorite_card.dart';
-
 import 'package:get/get.dart';
 
 import '../controllers/event_detail_controller.dart';
 
 class EventDetailView extends StatelessWidget {
-  final eventDetailController = Get.put(getIt<EventDetailController>(),tag: '${UniqueKey()}');
+  final eventDetailController = Get.put(getIt<EventDetailController>(), tag: '${UniqueKey()}');
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +25,9 @@ class EventDetailView extends StatelessWidget {
             return Center(
               child: CircularProgressIndicator(),
             );
-          }
-          else if (pageState is LOADED) {
-            final event = eventDetailController.event;
+          } else if (pageState is LOADED) {
+            final event = eventDetailController.event.value;
+            if (event == null) return const SizedBox();
             return Column(
               children: [
                 Expanded(
@@ -40,17 +39,19 @@ class EventDetailView extends StatelessWidget {
                         imageUrl: event.imageUrl,
                       ),
                       Obx(() {
-                        final isFav=eventDetailController.isFavorite.value;
-                          return FavoriteCard(
-                            onPressed: () => eventDetailController.onFavorite(),
-                            isFavorite: isFav,
-                          );
-                        }
-                      )
+                        final isFav = eventDetailController.isFavorite.value;
+                        return FavoriteCard(
+                          onPressed: () => eventDetailController.onFavorite(),
+                          isFavorite: isFav,
+                        );
+                      })
                     ],
                   ),
                 ),
-                Text('Similar Events',style: Get.textTheme.bodyText1,),
+                Text(
+                  'Similar Events',
+                  style: Get.textTheme.bodyText1,
+                ),
                 Obx(() {
                   final events = eventDetailController.events;
                   return Expanded(
@@ -75,7 +76,7 @@ class EventDetailView extends StatelessWidget {
                                       children: [
                                         InkWell(
                                           onTap: () => Get.toNamed(Routes.EVENT_DETAIL,
-                                              arguments: {"index": index}, preventDuplicates: false),
+                                              preventDuplicates: false, parameters: {"id": event.id}),
                                           child: CachedNetworkImage(
                                             imageUrl: event.imageUrl,
                                             fit: BoxFit.cover,

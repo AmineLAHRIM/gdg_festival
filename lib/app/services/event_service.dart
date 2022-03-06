@@ -12,14 +12,19 @@ class EventService {
 
   EventService(this.eventRepo);
 
-  Future<Either<Failure,List<Event>>> getEvents() async{
-    final failureOrEvents=await eventRepo.getEvents();
-    failureOrEvents.fold((failure) {
-    }, (_events) => events.assignAll(_events));
+  Future<Either<Failure, List<Event>>> getEvents() async {
+    final failureOrEvents = await eventRepo.getEvents();
+    failureOrEvents.fold((failure) {}, (_events) => events.assignAll(_events));
     return failureOrEvents;
   }
 
-  void favorite({required int index, required bool isFav}) {
+  Future<Either<Failure, Event>> getEvent({required String id}) async {
+    return eventRepo.getEvent(id: id);
+  }
+
+  void favorite({required String id, required bool isFav}) {
+    final index = events.indexWhere((e) => e.id == id);
+    if (index == -1) return;
     final event = events[index];
     event.isFavorite = !event.isFavorite;
     events[index] = event;

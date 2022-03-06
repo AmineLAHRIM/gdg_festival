@@ -44,8 +44,8 @@ class HomeController extends GetxController {
     });
   }
 
-  onFavorite({required int index, required bool isFav}) {
-    eventService.favorite(index: index, isFav: isFav);
+  onFavorite({required String id, required bool isFav}) {
+    eventService.favorite(id: id, isFav: isFav);
   }
 
   Future onRefresh() async {
